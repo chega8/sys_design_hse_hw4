@@ -1,0 +1,32 @@
+{
+  "mart_daily_state_metrics": {
+    "groups": 21473,
+    "values_checked": 107365,
+    "matches_csv": true
+  },
+  "mart_fraud_by_category": {
+    "groups": 14,
+    "values_checked": 84,
+    "matches_csv": true
+  },
+  "mart_fraud_by_state": {
+    "groups": 51,
+    "values_checked": 408,
+    "matches_csv": true
+  },
+  "mart_customer_risk_profile": {
+    "groups": 965,
+    "values_checked": 8685,
+    "matches_csv": true
+  },
+  "mart_hourly_fraud_pattern": {
+    "groups": 168,
+    "values_checked": 840,
+    "matches_csv": true
+  },
+  "mart_merchant_analytics": {
+    "groups": 693,
+    "values_checked": 4851,
+    "matches_csv": true
+  }
+}

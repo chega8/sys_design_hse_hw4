@@ -1,13 +1,12 @@
 import argparse
+import base64
 import csv
 import json
 import os
+import urllib.request
 from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
-
-import urllib.request
-import base64
 
 
 FLOAT_COLUMNS = ('lat', 'lon', 'merchant_lat', 'merchant_lon')
@@ -64,9 +63,9 @@ def main():
         with urllib.request.urlopen(req, timeout=120) as response:
             return response.read().decode().strip()
 
-    current = int(query('SELECT count() FROM homework.transactions'))
+    current = int(query('SELECT count() FROM transactions_db.transactions'))
     if current:
-        unique = int(query('SELECT uniqExact(tuple(source_file, source_row)) FROM homework.transactions'))
+        unique = int(query('SELECT uniqExact(tuple(source_file, source_row)) FROM transactions_db.transactions'))
         if current == expected == unique:
             print(f'Уже загружено {current} строк, пропускаю')
             return
@@ -78,14 +77,14 @@ def main():
             for number, row in enumerate(csv.DictReader(f), 1):
                 batch.append(json.dumps(convert(row, path.name, number), ensure_ascii=False, allow_nan=False).encode())
                 if len(batch) == 10000:
-                    query('INSERT INTO homework.transactions FORMAT JSONEachRow', batch)
+                    query('INSERT INTO transactions_db.transactions FORMAT JSONEachRow', batch)
                     total += len(batch)
                     batch.clear()
             if batch:
-                query('INSERT INTO homework.transactions FORMAT JSONEachRow', batch)
+                query('INSERT INTO transactions_db.transactions FORMAT JSONEachRow', batch)
                 total += len(batch)
         print(f'{path.name}: загружено, всего {total} строк', flush=True)
-    assert int(query('SELECT count() FROM homework.transactions')) == expected
+    assert int(query('SELECT count() FROM transactions_db.transactions')) == expected
     print(f'Готово: {expected} строк')
 
 
